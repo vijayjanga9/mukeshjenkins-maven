@@ -1,74 +1,41 @@
-pipeline { 
-    agent any  
-    stages { 
-        stage('Build') { 
-            steps { 
-               echo 'This is a minimal pipeline.' 
-            }
-        }
-    }
-}
-
-stages {
-        stage ('Initialize') {
-            steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                ''' 
-            }
-        }
-
-        stage ('Build') {
-            steps {
-                echo 'This is a minimal pipeline.'
-            }
-        }
-    }
-}
-
-stages {
-        stage ('Initialize') {
-            steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                '''
-            }
-        }
-
-        stage ('Build') {
-            steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true install' 
-            }
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml' 
-                }
-            }
-        }
-    }
-}
-
-
-
-
-
-
-pipeline {
+pipeline 
+{
     agent any
-     
-    stages {
-        stage('Ok') {
-            steps {
-                echo "Ok"
+
+    stages 
+    {
+        stage('Build') 
+        {
+            steps 
+            {
+                echo 'Build App'
+            }
+        }
+
+        stage('Test') 
+        {
+            steps 
+            {
+                echo 'Test App'
+            }
+        }
+
+        stage('Deploy') 
+        {
+            steps 
+            {
+                echo 'Deploy App'
             }
         }
     }
-    post {
-        always {
-            mail bcc: '', body: '', cc: '', from: '', replyTo: '', subject: '', to: 'vijaydocs100@gmail.com'
-        }
+
+    post
+    {
+
+    	always
+    	{
+    		emailext body: 'Summary', subject: 'Pipeline Status', to: 'vijaydocs100@gmail.com'
+    	}
+
     }
 }
-
